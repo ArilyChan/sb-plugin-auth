@@ -3,8 +3,7 @@ module.exports.apply = async (app, options = {}) => {
   const db = await require('./db')(options)
   app.middleware(async (meta, next) => {
     console.log(meta.message)
-    if (meta.message.startsWith('!auth')) {
-      console.log('auth')
+    if (meta.message.startsWith('!auth') && options.role === 'auth') {
       const token = meta.message.slice(5).trim()
       const tokenStat = await db.getStat({ token })
       console.log(tokenStat)
@@ -12,7 +11,7 @@ module.exports.apply = async (app, options = {}) => {
       if (tokenStat.status === 'authenticated') return meta.$send('已经认证过了，要换号先revoke (!revoke token)')
       const result = await db.authenticateTokenToQQ(token, meta.userId)
       if (result) return meta.$send('done')
-    } else if (meta.message.startsWith('!bindqq')) {
+    } else if (meta.message.startsWith('!bindqq') && options.role === 'bind') {
       const token = await db.createAuth()
       meta.$send(token.token)
       meta.$send('用你的qq发送上面的token内容给小阿日')
