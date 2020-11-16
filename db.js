@@ -31,10 +31,10 @@ module.exports = async (option) => {
       return collection.deleteMany({ token })
     },
     async authenticateTokenToQQ (token, qq) {
-      return await collection.findOneAndUpdate({ token }, { status: 'authenticated', qq })
+      return await collection.findOneAndUpdate({ token }, { $set: { status: 'authenticated', qq } })
     },
     async deauthenticate (token) {
-      return await collection.findOneAndUpdate({ token }, { status: 'revoked' })
+      return await collection.findOneAndUpdate({ token }, { $set: { status: 'revoked' } })
     },
     async getStat (token) {
       return await collection.findOne({ token })
