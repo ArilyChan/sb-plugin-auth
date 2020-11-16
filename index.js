@@ -4,7 +4,8 @@ module.exports.apply = async (app, options = {}) => {
   app.middleware(async (meta, next) => {
     if (meta.message.startsWith('!auth') && options.role === 'auth') {
       const token = meta.message.slice(5).trim()
-      const tokenStat = await db.getStat({ token })
+      console.log(token)
+      const tokenStat = await db.getStat(token)
       console.log(tokenStat)
       if (!tokenStat) return meta.$send('不存在这个token')
       if (tokenStat.status === 'authenticated') return meta.$send('已经认证过了，要换号先revoke (!revoke token)')
