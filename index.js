@@ -2,7 +2,6 @@ module.exports.name = 'qq-auth'
 module.exports.apply = async (app, options = {}) => {
   const db = await require('./db')(options)
   app.middleware(async (meta, next) => {
-    console.log(meta.message)
     if (meta.message.startsWith('!auth') && options.role === 'auth') {
       const token = meta.message.slice(5).trim()
       const tokenStat = await db.getStat({ token })
