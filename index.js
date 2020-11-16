@@ -15,7 +15,6 @@ module.exports.apply = async (app, options = {}) => {
       const token = await db.createAuth()
       meta.$send(token.token)
       meta.$send('用你的qq发送上面的token内容给小阿日')
-    }
-    return next()
+    } else return next()
   })
 }
